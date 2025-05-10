@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 // 🔧 あなたの Firebase 設定
@@ -56,5 +56,12 @@ onChildAdded(messagesRef, (data) => {
   const msg = data.val();
   const li = document.createElement("li");
   li.textContent = msg.text;
+  
+  // クリック（またはタップ）でメッセージを削除
+  li.addEventListener("click", () => {
+    remove(ref(db, "messages/" + data.key)); // メッセージをデータベースから削除
+    li.remove(); // DOMからも削除
+  });
+
   document.getElementById("messages").appendChild(li);
 });
