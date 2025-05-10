@@ -1,8 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, remove, onChildRemoved } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// 🔧 Firebase設定
 const firebaseConfig = {
   apiKey: "AIzaSyBHaf3Deu1DpR42p5qZrxtwj3oHoC1_Up0",
   authDomain: "line-chat-3f9f0.firebaseapp.com",
@@ -14,7 +13,6 @@ const firebaseConfig = {
   measurementId: "G-44V3JNS2M9"
 };
 
-// Firebase初期化
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
@@ -22,61 +20,45 @@ const provider = new GoogleAuthProvider();
 
 const messagesRef = ref(db, "messages");
 
-// 🔑 ログインボタンをクリックしたら認証
-document.getElementById("loginBtn").addEventListener("click", () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log("ログイン成功:", result.user.displayName);
-    })
-    .catch((error) => {
-      console.error("ログインエラー:", error);
-    });
-});
+let currentUser = null;
 
-// 🔄 ログイン状態を監視
+// ユーザーの認証状態を監視
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    console.log("ログイン済み:", user.displayName);
+    currentUser = user;
     document.getElementById("sendBtn").disabled = false;
+    console.log("ログイン中:", user.displayName);
+  } else {
+    // ログインしていない場合はGoogleでサインイン
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        currentUser = result.user;
+        console.log("ログイン成功:", result.user.displayName);
+      })
+      .catch((error) => {
+        console.error("ログインエラー:", error);
+      });
   }
 });
 
-// 📤 メッセージ送信
+// メッセージを送信する
 document.getElementById("sendBtn").addEventListener("click", () => {
   const input = document.getElementById("messageInput");
   const message = input.value.trim();
   if (message !== "") {
-    push(messagesRef, { text: message });
+    push(messagesRef, { text: message, sender: currentUser ? currentUser.displayName : '匿名' });
     input.value = "";
   }
 });
 
-// 📥 メッセージ受信（新しいメッセージ）
+// メッセージが追加されたときに画面に表示
 onChildAdded(messagesRef, (data) => {
   const msg = data.val();
   const li = document.createElement("li");
-  li.textContent = msg.text;
-  
-  // クリック（またはタップ）でメッセージを削除
-  li.addEventListener("click", () => {
-    remove(ref(db, "messages/" + data.key)); // メッセージをデータベースから削除
-    li.remove(); // DOMからも削除
-  });
-
-  document.getElementById("messages").appendChild(li);
-});
-
-// 📥 メッセージ削除時の同期
-onChildRemoved(messagesRef, (data) => {
-  const removedMsg = data.val();
-  const messagesList = document.getElementById("messages");
-  const liElements = messagesList.getElementsByTagName("li");
-
-  // 削除されたメッセージがあればDOMから削除
-  for (let i = 0; i < liElements.length; i++) {
-    if (liElements[i].textContent === removedMsg.text) {
-      liElements[i].remove();
-      break;
-    }
+  li.textContent = `${msg.sender}: ${msg.text}`;
+  li.classList.add('message');
+  if (msg.sender !== currentUser.displayName) {
+    li.classList.add('received'); // 受信者のメッセージには別のスタイルを適用
   }
+  document.getElementById("messages").appendChild(li);
 });
