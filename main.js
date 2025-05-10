@@ -1,13 +1,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyC2Rzo8QWPTtam4KtlfV2EaT3wf8corGro",
-  authDomain: "line-chat-app-1c6ee.firebaseapp.com",
-  projectId: "line-chat-app-1c6ee",
-  storageBucket: "line-chat-app-1c6ee.firebasestorage.app",
-  messagingSenderId: "244301193406",
-  appId: "1:244301193406:web:b63a62f866367c0f257eef"
+firebaseConfig = {
+  apiKey: "AIzaSyBHaf3Deu1DpR42p5qZrxtwj3oHoC1_Up0",
+  authDomain: "line-chat-3f9f0.firebaseapp.com",
+  databaseURL: "https://line-chat-3f9f0-default-rtdb.firebaseio.com",
+  projectId: "line-chat-3f9f0",
+  storageBucket: "line-chat-3f9f0.firebasestorage.app",
+  messagingSenderId: "965302170225",
+  appId: "1:965302170225:web:6847a02de49ddd217661d0",
+  measurementId: "G-44V3JNS2M9"
 };
 
 const app = initializeApp(firebaseConfig);
