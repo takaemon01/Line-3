@@ -1,8 +1,8 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, remove, onChildRemoved } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-// 🔧 あなたの Firebase 設定
+// 🔧 Firebase設定
 const firebaseConfig = {
   apiKey: "AIzaSyBHaf3Deu1DpR42p5qZrxtwj3oHoC1_Up0",
   authDomain: "line-chat-3f9f0.firebaseapp.com",
@@ -51,7 +51,7 @@ document.getElementById("sendBtn").addEventListener("click", () => {
   }
 });
 
-// 📥 メッセージ受信
+// 📥 メッセージ受信（新しいメッセージ）
 onChildAdded(messagesRef, (data) => {
   const msg = data.val();
   const li = document.createElement("li");
@@ -64,4 +64,19 @@ onChildAdded(messagesRef, (data) => {
   });
 
   document.getElementById("messages").appendChild(li);
+});
+
+// 📥 メッセージ削除時の同期
+onChildRemoved(messagesRef, (data) => {
+  const removedMsg = data.val();
+  const messagesList = document.getElementById("messages");
+  const liElements = messagesList.getElementsByTagName("li");
+
+  // 削除されたメッセージがあればDOMから削除
+  for (let i = 0; i < liElements.length; i++) {
+    if (liElements[i].textContent === removedMsg.text) {
+      liElements[i].remove();
+      break;
+    }
+  }
 });
