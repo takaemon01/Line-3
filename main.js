@@ -4,11 +4,10 @@ import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/fi
 const firebaseConfig = {
   apiKey: "AIzaSyC2Rzo8QWPTtam4KtlfV2EaT3wf8corGro",
   authDomain: "line-chat-app-1c6ee.firebaseapp.com",
-  databaseURL: "https://line-chat-app-1c6ee-default-rtdb.firebaseio.com",
   projectId: "line-chat-app-1c6ee",
-  storageBucket: "line-chat-app-1c6ee.appspot.com",
+  storageBucket: "line-chat-app-1c6ee.firebasestorage.app",
   messagingSenderId: "244301193406",
-  appId: "1:244301193406:web:d5c668bca7fa1ba6257eef"
+  appId: "1:244301193406:web:b63a62f866367c0f257eef"
 };
 
 const app = initializeApp(firebaseConfig);
