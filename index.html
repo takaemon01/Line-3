@@ -2,16 +2,22 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LINE風チャット</title>
-  <link rel="manifest" href="manifest.json" />
-  <link rel="icon" href="icon.png" />
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
+    #messages { list-style: none; padding: 0; }
+    #messages li { border-bottom: 1px solid #ccc; padding: 0.5rem 0; }
+  </style>
 </head>
 <body>
   <h1>LINE風チャット</h1>
-  <input id="messageInput" placeholder="メッセージを入力" />
-  <button id="sendBtn">送信</button>
+  <button id="loginBtn">Googleでログイン</button>
+  <p id="userInfo"></p>
+
   <ul id="messages"></ul>
+
+  <input type="text" id="messageInput" placeholder="メッセージを入力..." />
+  <button id="sendBtn" disabled>送信</button>
 
   <script type="module" src="main.js"></script>
 </body>
