@@ -4,7 +4,7 @@ import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/fi
 const firebaseConfig = {
   apiKey: "AIzaSyC2Rzo8QWPTtam4KtlfV2EaT3wf8corGro",
   authDomain: "line-chat-app-1c6ee.firebaseapp.com",
-  databaseURL: "https://line-chat-app-1c6ee-default-rtdb.firebaseio.com",
+  databaseURL: "https://console.firebase.google.com/u/0/project/line-chat-3f9f0/database/line-chat-3f9f0-default-rtdb/data/~2F?hl=ja",
   projectId: "line-chat-app-1c6ee",
   storageBucket: "line-chat-app-1c6ee.appspot.com",
   messagingSenderId: "244301193406",
