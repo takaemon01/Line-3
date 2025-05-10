@@ -2,28 +2,21 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>LINE風チャット</title>
-  <style>
-    body { font-family: sans-serif; max-width: 600px; margin: 2rem auto; }
-    #messages { list-style: none; padding: 0; }
-    #messages li { border-bottom: 1px solid #ccc; padding: 0.5rem 0; }
-    #loginBtn { margin-bottom: 1rem; }
-  </style>
 </head>
 <body>
   <h1>LINE風チャット</h1>
 
-  <!-- ✅ ログインボタン -->
-  <button id="loginBtn">Googleでログイン</button>
-  <p id="userInfo"></p>
-
-  <!-- メッセージ一覧 -->
-  <ul id="messages"></ul>
+  <!-- ログインボタン -->
+  <button id="loginBtn">ログイン</button>
 
   <!-- メッセージ送信欄 -->
-  <input type="text" id="messageInput" placeholder="メッセージを入力..." />
+  <ul id="messages"></ul>
+  <input type="text" id="messageInput" placeholder="メッセージを入力" />
   <button id="sendBtn" disabled>送信</button>
 
+  <!-- Firebase関連のJSを読み込む -->
   <script type="module" src="main.js"></script>
 </body>
 </html>
