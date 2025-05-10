@@ -9,8 +9,7 @@ const firebaseConfig = {
   projectId: "line-chat-3f9f0",
   storageBucket: "line-chat-3f9f0.firebasestorage.app",
   messagingSenderId: "965302170225",
-  appId: "1:965302170225:web:6847a02de49ddd217661d0",
-  measurementId: "G-44V3JNS2M9"
+  appId: "1:965302170225:web:6847a02de49ddd217661d0"
 };
 
 const app = initializeApp(firebaseConfig);
@@ -20,48 +19,39 @@ const provider = new GoogleAuthProvider();
 
 const messagesRef = ref(db, "messages");
 
-// 認証状態の監視
+function setupChat() {
+  // メッセージ送信処理
+  document.getElementById("sendBtn").addEventListener("click", () => {
+    const input = document.getElementById("messageInput");
+    const message = input.value.trim();
+    if (message !== "") {
+      push(messagesRef, { text: message });
+      input.value = "";
+    }
+  });
+
+  // メッセージ受信処理
+  onChildAdded(messagesRef, (data) => {
+    const msg = data.val();
+    const li = document.createElement("li");
+    li.textContent = msg.text;
+    document.getElementById("messages").appendChild(li);
+  });
+}
+
+// 認証状態を確認してからチャット処理を開始
 onAuthStateChanged(auth, (user) => {
   if (user) {
-    document.getElementById("sendBtn").disabled = false;
-    document.getElementById("userInfo").textContent = `ログイン中：${user.displayName}`;
+    console.log("ログイン中:", user.displayName);
+    setupChat();
   } else {
-    document.getElementById("sendBtn").disabled = true;
-    document.getElementById("userInfo").textContent = "ログインしていません";
+    signInWithPopup(auth, provider)
+      .then((result) => {
+        console.log("ログイン成功:", result.user.displayName);
+        setupChat();
+      })
+      .catch((error) => {
+        console.error("ログインエラー:", error);
+      });
   }
-});
-
-// ログインボタン
-document.getElementById("loginBtn").addEventListener("click", () => {
-  signInWithPopup(auth, provider)
-    .then((result) => {
-      console.log("ログイン成功:", result.user.displayName);
-    })
-    .catch((error) => {
-      console.error("ログインエラー:", error);
-    });
-});
-
-// 送信ボタン
-document.getElementById("sendBtn").addEventListener("click", () => {
-  const input = document.getElementById("messageInput");
-  const message = input.value.trim();
-  const user = auth.currentUser;
-
-  if (message !== "" && user) {
-    push(messagesRef, {
-      text: message,
-      name: user.displayName,
-      uid: user.uid
-    });
-    input.value = "";
-  }
-});
-
-// メッセージ受信
-onChildAdded(messagesRef, (data) => {
-  const msg = data.val();
-  const li = document.createElement("li");
-  li.textContent = `${msg.name || "名無し"}: ${msg.text}`;
-  document.getElementById("messages").appendChild(li);
 });
