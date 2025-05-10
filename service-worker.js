@@ -1,24 +1,21 @@
-const cacheName = 'line-chat-v1';
-const filesToCache = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/main.js',
-  // 必要な他のファイル
-];
-
 self.addEventListener('install', (e) => {
   e.waitUntil(
-    caches.open(cacheName).then((cache) => {
-      return cache.addAll(filesToCache);
+    caches.open('chat-app-cache').then((cache) => {
+      return cache.addAll([
+        './',
+        './index.html',
+        './main.js',
+        './manifest.json',
+        './icon.png'
+      ]);
     })
   );
 });
 
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((res) => {
-      return res || fetch(e.request);
+    caches.match(e.request).then((response) => {
+      return response || fetch(e.request);
     })
   );
 });
