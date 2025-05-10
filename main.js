@@ -6,7 +6,7 @@ import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from
 const firebaseConfig = {
   apiKey: "AIzaSyBHaf3Deu1DpR42p5qZrxtwj3oHoC1_Up0",
   authDomain: "line-chat-3f9f0.firebaseapp.com",
-  databaseURL: "https://line-chat-3f9f0-default-rtdb.firebaseio.com",
+  databaseURL: "https://line-chat-3f9f0-default-rtdb.firebaseio.com/",
   projectId: "line-chat-3f9f0",
   storageBucket: "line-chat-3f9f0.firebasestorage.app",
   messagingSenderId: "965302170225",
