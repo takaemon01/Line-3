@@ -26,6 +26,7 @@ document.getElementById("sendBtn").addEventListener("click", () => {
 
 onChildAdded(messagesRef, (data) => {
   const msg = data.val();
+  console.log("新しいメッセージ:", msg);
   const li = document.createElement("li");
   li.textContent = msg.text;
   document.getElementById("messages").appendChild(li);
