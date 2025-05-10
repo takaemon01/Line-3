@@ -20,35 +20,48 @@ const provider = new GoogleAuthProvider();
 
 const messagesRef = ref(db, "messages");
 
-// ユーザーの認証状態を監視
+// 認証状態の監視
 onAuthStateChanged(auth, (user) => {
   if (user) {
     document.getElementById("sendBtn").disabled = false;
-    console.log("ログイン中:", user.displayName);
+    document.getElementById("userInfo").textContent = `ログイン中：${user.displayName}`;
   } else {
-    // ログインしてないならログインする
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log("ログイン成功:", result.user.displayName);
-      })
-      .catch((error) => {
-        console.error("ログインエラー:", error);
-      });
+    document.getElementById("sendBtn").disabled = true;
+    document.getElementById("userInfo").textContent = "ログインしていません";
   }
 });
 
+// ログインボタン
+document.getElementById("loginBtn").addEventListener("click", () => {
+  signInWithPopup(auth, provider)
+    .then((result) => {
+      console.log("ログイン成功:", result.user.displayName);
+    })
+    .catch((error) => {
+      console.error("ログインエラー:", error);
+    });
+});
+
+// 送信ボタン
 document.getElementById("sendBtn").addEventListener("click", () => {
   const input = document.getElementById("messageInput");
   const message = input.value.trim();
-  if (message !== "") {
-    push(messagesRef, { text: message });
+  const user = auth.currentUser;
+
+  if (message !== "" && user) {
+    push(messagesRef, {
+      text: message,
+      name: user.displayName,
+      uid: user.uid
+    });
     input.value = "";
   }
 });
 
+// メッセージ受信
 onChildAdded(messagesRef, (data) => {
   const msg = data.val();
   const li = document.createElement("li");
-  li.textContent = msg.text;
+  li.textContent = `${msg.name || "名無し"}: ${msg.text}`;
   document.getElementById("messages").appendChild(li);
 });
